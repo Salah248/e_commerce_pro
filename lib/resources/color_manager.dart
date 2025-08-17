@@ -6,4 +6,5 @@ class ColorManager {
   static const Color secondaryColor = Color(0xff808080);
   static const Color whiteColor = Color(0xffFFFFFF);
   static const Color redColor = Color(0xffED1010);
+  static const Color borderColor = Color(0xffE6E6E6);
 }

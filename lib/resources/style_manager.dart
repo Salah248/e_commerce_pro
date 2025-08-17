@@ -20,7 +20,7 @@ class StyleManager {
     fontWeight: FontWeight.w500,
   );
   static final TextStyle textFieldHint = GoogleFonts.readexPro(
-    color: ColorManager.secondaryColor,
+    color: const Color(0xff999999),
     fontSize: 16.sp,
     fontWeight: FontWeight.w400,
   );
