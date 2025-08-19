@@ -1,3 +1,8 @@
+import 'package:e_commerce_pro/resources/color_manager.dart';
+import 'package:e_commerce_pro/ui/screens/main/Pages/account_page.dart';
+import 'package:e_commerce_pro/ui/screens/main/Pages/home_page.dart';
+import 'package:e_commerce_pro/ui/screens/main/Pages/my_cart_page.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class MainScreen extends StatefulWidget {
@@ -8,8 +13,47 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final List<Widget> _items = [
+    Container(),
+    const HomePage(),
+    const MyCartPage(),
+    const AccountPage(),
+    Container(),
+  ];
+  int _selectedIndex = 1;
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: (value) {
+          if (value == 0 || value == 4) return;
+          setState(() {
+            _selectedIndex = value;
+          });
+        },
+        selectedItemColor: ColorManager.primaryColor,
+        unselectedItemColor: ColorManager.secondaryColor,
+        type: BottomNavigationBarType.fixed,
+        showUnselectedLabels: true,
+        elevation: 0,
+        backgroundColor: Colors.white,
+
+        items: const [
+          BottomNavigationBarItem(icon: SizedBox.shrink(), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: 'Home'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Cart',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle_outlined),
+            label: 'Account',
+          ),
+          BottomNavigationBarItem(icon: SizedBox.shrink(), label: ''),
+        ],
+      ),
+      body: _items[_selectedIndex],
+    );
   }
 }

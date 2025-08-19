@@ -55,13 +55,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       obscure
                           ? Icons.visibility_off_outlined
                           : Icons.visibility_outlined,
-
                       color: ColorManager.secondaryColor,
                     ),
                   ),
                 ),
                 SizedBox(height: 55.h),
-                CustomButton(buttonTitle: 'Sign In', onPressed: () {}),
+                CustomButton(
+                  buttonTitle: 'Sign In',
+                  onPressed: () {
+                    context.pushReplacement(Routes.main);
+                  },
+                ),
                 SizedBox(height: 260.h),
                 CustomTextSpan(
                   text: 'Don’t have an account?',
