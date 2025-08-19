@@ -1,8 +1,10 @@
 import 'package:e_commerce_pro/resources/color_manager.dart';
+import 'package:e_commerce_pro/resources/route_manager.dart';
 import 'package:e_commerce_pro/resources/style_manager.dart';
 import 'package:e_commerce_pro/ui/widgets/custom_cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
@@ -110,7 +112,7 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: 24.h),
             Expanded(
               child: GridView.builder(
-                shrinkWrap: true, // 🔥 هنا
+                shrinkWrap: true,
                 itemCount: _items2.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -191,30 +193,34 @@ class _HomePageState extends State<HomePage> {
     required String? title,
     required String? price,
   }) {
-    return Container(
-      width: 161.w,
-      decoration: const BoxDecoration(color: Colors.transparent),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          CustomCachedNetworkImage(
-            imageUrl: image,
-            width: 161.w,
-            height: 174.h,
-          ),
-          Text(
-            title ?? 'Null',
-            style: StyleManager.cardTitle.copyWith(fontSize: 16.sp),
-          ),
-          Text(
-            '\$ ${NumberFormat('#,##0').format(int.tryParse(price ?? '0') ?? 0)}',
-            style: StyleManager.textFieldHint.copyWith(
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w500,
+    return GestureDetector(
+      onTap: () {
+        context.push(Routes.productDetails);
+      },
+      child: Container(
+        decoration: const BoxDecoration(color: Colors.transparent),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CustomCachedNetworkImage(
+              imageUrl: image,
+              width: 161.w,
+              height: 174.h,
             ),
-          ),
-        ],
+            Text(
+              title ?? 'Null',
+              style: StyleManager.cardTitle.copyWith(fontSize: 16.sp),
+            ),
+            Text(
+              '\$ ${NumberFormat('#,##0').format(int.tryParse(price ?? '0') ?? 0)}',
+              style: StyleManager.textFieldHint.copyWith(
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

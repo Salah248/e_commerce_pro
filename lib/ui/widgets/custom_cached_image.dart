@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_pro/resources/color_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomCachedNetworkImage extends StatelessWidget {
   const CustomCachedNetworkImage({
@@ -17,12 +18,12 @@ class CustomCachedNetworkImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.r)),
       width: width,
       height: height,
       child: CachedNetworkImage(
-        width: width,
-        height: height,
         imageUrl: (imageUrl == null || imageUrl!.isEmpty)
             ? 'https://static.thenounproject.com/png/504708-200.png'
             : imageUrl!,
