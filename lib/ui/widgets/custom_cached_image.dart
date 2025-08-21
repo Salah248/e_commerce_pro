@@ -11,19 +11,23 @@ class CustomCachedNetworkImage extends StatelessWidget {
     required this.imageUrl,
     this.width,
     this.height,
+    this.radius,
   });
   final String? imageUrl;
   final double? width;
   final double? height;
+  final double? radius;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.r)),
-      width: width,
-      height: height,
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(radius ?? 10.r),
+      ),
       child: CachedNetworkImage(
+        width: width,
+        height: height,
         imageUrl: (imageUrl == null || imageUrl!.isEmpty)
             ? 'https://static.thenounproject.com/png/504708-200.png'
             : imageUrl!,

@@ -28,52 +28,52 @@ class _HomePageState extends State<HomePage> {
       image:
           'https://purepng.com/public/uploads/large/purepng.com-t-shirtclothingt-shirtfashion-dress-shirt-cloth-tshirt-631522326894filwv.png',
       title: 'T Shirt',
-      price: '1193',
+      price: 1193,
     ),
     _customItem(
       image: 'https://purepng.com/public/uploads/large/jeans-pant-xom.png',
       title: 'Jeans Pant',
-      price: '2000',
+      price: 2000,
     ),
     _customItem(
       image:
           'https://purepng.com/public/uploads/large/purepng.com-t-shirtclothingt-shirtfashion-dress-shirt-cloth-tshirt-631522326894filwv.png',
       title: 'T Shirt',
-      price: '1193',
+      price: 1193,
     ),
     _customItem(
       image: 'https://purepng.com/public/uploads/large/jeans-pant-xom.png',
       title: 'Jeans Pant',
-      price: '2000',
+      price: 2000,
     ),
     _customItem(
       image:
           'https://purepng.com/public/uploads/large/purepng.com-t-shirtclothingt-shirtfashion-dress-shirt-cloth-tshirt-631522326894filwv.png',
       title: 'T Shirt',
-      price: '1193',
+      price: 1193,
     ),
     _customItem(
       image: 'https://purepng.com/public/uploads/large/jeans-pant-xom.png',
       title: 'Jeans Pant',
-      price: '2000',
+      price: 2000,
     ),
     _customItem(
       image:
           'https://purepng.com/public/uploads/large/purepng.com-t-shirtclothingt-shirtfashion-dress-shirt-cloth-tshirt-631522326894filwv.png',
       title: 'T Shirt',
-      price: '1193',
+      price: 1193,
     ),
     _customItem(
       image: 'https://purepng.com/public/uploads/large/jeans-pant-xom.png',
       title: 'Jeans Pant',
-      price: '2000',
+      price: 2000,
     ),
   ];
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: EdgeInsets.all(25.r),
+        padding: EdgeInsets.symmetric(horizontal: 25.r),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -109,11 +109,12 @@ class _HomePageState extends State<HomePage> {
                 itemBuilder: (context, index) => _items[index],
               ),
             ),
-            SizedBox(height: 24.h),
+            SizedBox(height: 10.h),
             Expanded(
               child: GridView.builder(
                 shrinkWrap: true,
                 itemCount: _items2.length,
+                padding: EdgeInsets.only(top: 12.h),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 19.w,
@@ -191,7 +192,7 @@ class _HomePageState extends State<HomePage> {
   Widget _customItem({
     required String? image,
     required String? title,
-    required String? price,
+    required int? price,
   }) {
     return GestureDetector(
       onTap: () {
@@ -213,7 +214,7 @@ class _HomePageState extends State<HomePage> {
               style: StyleManager.cardTitle.copyWith(fontSize: 16.sp),
             ),
             Text(
-              '\$ ${NumberFormat('#,##0').format(int.tryParse(price ?? '0') ?? 0)}',
+              '\$ ${NumberFormat('#,##0').format(price ?? 0)}',
               style: StyleManager.textFieldHint.copyWith(
                 fontSize: 12.sp,
                 fontWeight: FontWeight.w500,
