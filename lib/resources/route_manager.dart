@@ -3,10 +3,12 @@ import 'package:e_commerce_pro/ui/screens/auth/signup_screen.dart';
 import 'package:e_commerce_pro/ui/screens/main/adress_screen.dart';
 import 'package:e_commerce_pro/ui/screens/main/main_screen.dart';
 import 'package:e_commerce_pro/ui/screens/main/product_detailes_screen.dart';
+import 'package:e_commerce_pro/ui/screens/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 
 class Routes {
-  static const String login = '/';
+  static const String splash = '/';
+  static const String login = '/login';
   static const String signUp = '/signUp';
   static const String main = '/main';
   static const String productDetails = '/productDetails';
@@ -16,6 +18,10 @@ class Routes {
 class RouteManager {
   static final GoRouter router = GoRouter(
     routes: [
+      GoRoute(
+        path: Routes.splash,
+        builder: (context, state) => const SplashScreen(),
+      ),
       GoRoute(
         path: Routes.login,
         builder: (context, state) => const LoginScreen(),

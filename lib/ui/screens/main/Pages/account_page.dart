@@ -1,7 +1,10 @@
+import 'package:e_commerce_pro/data/services/secure_storge.dart';
+import 'package:e_commerce_pro/di.dart';
 import 'package:e_commerce_pro/resources/color_manager.dart';
 import 'package:e_commerce_pro/resources/route_manager.dart';
 import 'package:e_commerce_pro/resources/style_manager.dart';
 import 'package:e_commerce_pro/ui/widgets/custom_button.dart';
+import 'package:e_commerce_pro/ui/widgets/show_snak_par.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -205,7 +208,12 @@ class _AccountPageState extends State<AccountPage> {
               CustomButton(
                 buttonTitle: 'Yes, Logout',
                 backgroundColor: ColorManager.redColor,
-                onPressed: () => context.pushReplacement(Routes.login),
+                onPressed: () async {
+                  context.pop();
+                  await di<SecureStorage>().delete('token');
+                  showSnackBar(context, 'Logout successfully');
+                  context.go(Routes.login);
+                },
                 width: 293.w,
                 height: 54.h,
               ),

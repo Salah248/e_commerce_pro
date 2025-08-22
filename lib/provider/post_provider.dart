@@ -26,7 +26,7 @@ class PostProviderNotifier extends StateNotifier<Map<String, dynamic>> {
     print('posted login');
     try {
       final response = await dio.post(ConstantManager.loginUrl, data);
-      final token = response != null ? response.data['token'] : null;
+      final token = response != null ? response['token'] : null;
       print('token: $token');
       return Right(token);
     } on DioException catch (e) {

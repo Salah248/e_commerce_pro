@@ -27,20 +27,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   var obscure = true;
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _checkLogin());
-  }
-
-  void _checkLogin() async {
-    final token = await di<SecureStorage>().get('token');
-    if (!mounted) return;
-    if (token != null && token.isNotEmpty && token != 'null') {
-      context.go(Routes.main);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final post = ref.read<PostProviderNotifier>(postProvider.notifier);
     return Scaffold(
