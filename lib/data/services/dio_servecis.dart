@@ -28,15 +28,17 @@ class DioService {
     }
   }
 
-  Future<void> post(
+  Future<dynamic> post(
     String url,
     Map<String, dynamic> data, {
     Options? options,
   }) async {
     try {
-      await dio.post(url, data: data, options: options);
+      final response = await dio.post(url, data: data, options: options);
+      return response.data; // إرجاع النتيجة
     } on DioError catch (e) {
       print(e);
+      return e.response?.data;
     }
   }
 }
