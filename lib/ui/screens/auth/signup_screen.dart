@@ -16,6 +16,13 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  var obscure = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,63 +30,108 @@ class _SignupScreenState extends State<SignupScreen> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  alignment: Alignment.topLeft,
-                  child: const CustomAppBar(
-                    title: 'Create an account',
-                    supTitle: 'Let’s create your account.',
-                  ),
-                ),
-                SizedBox(height: 24.h),
-                const CustomTextFormField(
-                  titleText: 'Full Name',
-                  hintText: 'full name',
-                ),
-                SizedBox(height: 16.h),
-                const CustomTextFormField(
-                  titleText: 'User Name',
-                  hintText: 'email address',
-                ),
-                SizedBox(height: 16.h),
-                CustomTextFormField(
-                  titleText: 'Password',
-                  hintText: 'password',
-                  suffixIcon: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.visibility_off_outlined,
-                      color: ColorManager.secondaryColor,
+            child: Form(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    alignment: Alignment.topLeft,
+                    child: const CustomAppBar(
+                      title: 'Create an account',
+                      supTitle: 'Let’s create your account.',
                     ),
                   ),
-                ),
-                SizedBox(height: 16.h),
-                CustomTextFormField(
-                  titleText: 'Confirm Password',
-                  hintText: 'confirm password',
-                  suffixIcon: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.visibility_off_outlined,
-                      color: ColorManager.secondaryColor,
-                    ),
+                  SizedBox(height: 24.h),
+                  CustomTextFormField(
+                    titleText: 'Full Name',
+                    hintText: 'full name',
+                    controller: _nameController,
                   ),
-                ),
-                SizedBox(height: 55.h),
-                CustomButton(buttonTitle: 'Create Account', onPressed: () {}),
-                SizedBox(height: 60.h),
-                CustomTextSpan(
-                  text: 'Already have an account?',
-                  textInline: 'Log In',
-                  onTap: () => context.pop(Routes.login),
-                ),
-              ],
+                  SizedBox(height: 16.h),
+                  CustomTextFormField(
+                    titleText: 'Email',
+                    hintText: 'email address',
+                    controller: _emailController,
+                    validator: (value) {
+                      if (value!.isEmpty || !value.contains('@')) {
+                        return 'Please enter a valid email address';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16.h),
+                  CustomTextFormField(
+                    titleText: 'Password',
+                    hintText: 'password',
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          obscure = !obscure;
+                        });
+                      },
+                      icon: Icon(
+                        obscure
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        color: ColorManager.secondaryColor,
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty || value.length < 6) {
+                        return 'Password must be at least 6 characters';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16.h),
+                  CustomTextFormField(
+                    titleText: 'Confirm Password',
+                    hintText: 'confirm password',
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          obscure = !obscure;
+                        });
+                      },
+                      icon: Icon(
+                        obscure
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        color: ColorManager.secondaryColor,
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty || value != _passwordController.text) {
+                        return 'Password must be at least 6 characters';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 55.h),
+                  CustomButton(buttonTitle: 'Create Account', onPressed: () {}),
+                  SizedBox(height: 60.h),
+                  CustomTextSpan(
+                    text: 'Already have an account?',
+                    textInline: 'Log In',
+                    onTap: () => context.pop(Routes.login),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _nameController.dispose();
+    super.dispose();
   }
 }
