@@ -35,8 +35,12 @@ class SplashScreen extends ConsumerWidget {
   }
 
   Future<void> _checkLogin(BuildContext context) async {
-    await Future.delayed(const Duration(seconds: 2)); // لتأخير الانتقال قليلاً
+    await Future.delayed(const Duration(seconds: 2));
+
+    if (!context.mounted) return; // حماية من استدعاء context بعد التخلص
+
     final token = await di<SecureStorage>().get('token');
+
     if (token != null && token.isNotEmpty && token != 'null') {
       context.go(Routes.main);
     } else {

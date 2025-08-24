@@ -1,3 +1,4 @@
+import 'package:e_commerce_pro/data/model/products_model.dart';
 import 'package:e_commerce_pro/ui/screens/auth/login_screen.dart';
 import 'package:e_commerce_pro/ui/screens/auth/signup_screen.dart';
 import 'package:e_commerce_pro/ui/screens/main/adress_screen.dart';
@@ -32,12 +33,15 @@ class RouteManager {
       ),
       GoRoute(
         path: Routes.main,
-        builder: (context, state) => const MainScreen(),
+        builder: (context, state) =>
+            MainScreen(productsModel: state.extra as ProductsModel),
       ),
       GoRoute(
         path: Routes.productDetails,
         builder: (context, state) {
-          return const ProductDetailsScreen();
+          return ProductDetailsScreen(
+            productsModel: state.extra as ProductsModel,
+          );
         },
       ),
       GoRoute(

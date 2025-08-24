@@ -34,7 +34,27 @@ class CustomCachedNetworkImage extends StatelessWidget {
         fit: BoxFit.cover,
         errorWidget: (context, url, error) {
           log('error: $error');
-          return const Icon(Icons.error, color: Colors.red);
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Icon(Icons.image_not_supported, color: Colors.red),
+              SizedBox(width: 10.w),
+              Container(
+                width: 100.w,
+                height: 100.h,
+                decoration: BoxDecoration(
+                  image: const DecorationImage(
+                    image: NetworkImage(
+                      'https://static.thenounproject.com/png/504708-200.png',
+                    ),
+                  ),
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
+              ),
+            ],
+          );
         },
         placeholder: (context, url) => const Center(
           child: CircularProgressIndicator(color: ColorManager.primaryColor),

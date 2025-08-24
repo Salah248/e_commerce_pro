@@ -8,5 +8,6 @@ class ConstantManager {
   static const String getCategoriesUrl = '${baseUrl}products/categories';
   static const String getCategoryProductsUrl = '${baseUrl}products/category/';
   static const String getCartUrl = '${baseUrl}carts/user/';
+  static const String addOrgetCartUrl = '${baseUrl}carts';
 }
 // https://fakestoreapi.com/users

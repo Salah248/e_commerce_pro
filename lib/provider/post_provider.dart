@@ -36,6 +36,20 @@ class PostProviderNotifier extends StateNotifier<Map<String, dynamic>> {
       print('login success');
     }
   }
+
+  Future<Either<String, dynamic>> postCart(Map<String, dynamic> data) async {
+    print('posted cart');
+    try {
+      final response = await dio.post(ConstantManager.addOrgetCartUrl, data);
+      print('response: $response');
+      return Right(response);
+    } on DioException catch (e) {
+      print(e);
+      return Left(e.response?.data ?? 'An error occurred');
+    } finally {
+      print('success');
+    }
+  }
 }
 
 final postProvider =

@@ -5,8 +5,8 @@ class DioService {
   final Dio dio = Dio(
     BaseOptions(
       baseUrl: ConstantManager.baseUrl,
-      connectTimeout: const Duration(milliseconds: 5000),
-      receiveTimeout: const Duration(milliseconds: 5000),
+      connectTimeout: const Duration(milliseconds: 15000),
+      receiveTimeout: const Duration(milliseconds: 15000),
       headers: {'Content-Type': 'application/json'},
     ),
   );

@@ -1,3 +1,5 @@
+import 'package:e_commerce_pro/data/model/products_model.dart';
+import 'package:e_commerce_pro/provider/cart_provider.dart';
 import 'package:e_commerce_pro/provider/quantity_state.dart';
 import 'package:e_commerce_pro/resources/color_manager.dart';
 
@@ -11,30 +13,25 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 class MyCartPage extends ConsumerStatefulWidget {
-  const MyCartPage({super.key});
+  const MyCartPage({super.key, required this.product});
+  final ProductsModel product;
 
   @override
   ConsumerState<MyCartPage> createState() => _MyCartPageState();
 }
 
 class _MyCartPageState extends ConsumerState<MyCartPage> {
-  List<Widget> get _list => [
-    _customItem(
-      title: 'Regular Fit Slogan',
-      size: ' L',
-      image:
-          'https://purepng.com/public/uploads/large/purepng.com-t-shirtclothingt-shirtfashion-dress-shirt-cloth-tshirt-631522326894filwv.png',
-      price: 1568,
-    ),
-    _customItem(
-      title: 'Regular Fit Polo',
-      size: 'M',
-      image: 'https://purepng.com/public/uploads/large/jeans-pant-xom.png',
-      price: 1234,
-    ),
-  ];
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read<CartProvider>(cartProvider.notifier).getCarts();
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final list = ref.watch(cartProvider);
     return SafeArea(
       child: SingleChildScrollView(
         child: Padding(
@@ -46,14 +43,31 @@ class _MyCartPageState extends ConsumerState<MyCartPage> {
                 style: StyleManager.headingTitle.copyWith(fontSize: 24.sp),
               ),
               SizedBox(height: 20.h),
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.zero,
-                separatorBuilder: (context, index) => SizedBox(height: 14.h),
-                itemCount: _list.length,
-                itemBuilder: (context, index) => _list[index],
+              list.when(
+                data: (data) {
+                  return ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: EdgeInsets.zero,
+                    separatorBuilder: (context, index) =>
+                        SizedBox(height: 14.h),
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      return _customItem(
+                        title: widget.product.title,
+                        size: widget.product.description,
+                        image: widget.product.image,
+                        price: widget.product.price,
+                      );
+                    },
+                  );
+                },
+                error: (error, stackTrace) => Center(
+                  child: Text(error.toString(), style: StyleManager.cardTitle),
+                ),
+                loading: () => const Center(child: CircularProgressIndicator()),
               ),
+
               SizedBox(height: 100.h),
               _customRow(title: 'Sub-total', price: 5870),
               SizedBox(height: 16.h),
@@ -96,7 +110,7 @@ class _MyCartPageState extends ConsumerState<MyCartPage> {
     required String? title,
     required String? size,
     required String? image,
-    required int? price,
+    required double? price,
   }) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 14.h),
@@ -139,6 +153,7 @@ class _MyCartPageState extends ConsumerState<MyCartPage> {
                           style: StyleManager.headingSubTitle.copyWith(
                             fontSize: 12.sp,
                           ),
+                          maxLines: 1,
                         ),
                       ],
                     ),
