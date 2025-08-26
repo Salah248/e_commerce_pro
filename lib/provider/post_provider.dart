@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:e_commerce_pro/data/model/token_model.dart';
 import 'package:e_commerce_pro/data/services/dio_servecis.dart';
 import 'package:e_commerce_pro/di.dart';
 import 'package:e_commerce_pro/resources/constants.dart';
@@ -22,11 +23,13 @@ class PostProviderNotifier extends StateNotifier<Map<String, dynamic>> {
     }
   }
 
-  Future<Either<String, String>> postLogin(Map<String, dynamic> data) async {
+  Future<Either<String, TokenModel>> postLogin(
+    Map<String, dynamic> data,
+  ) async {
     print('posted login');
     try {
       final response = await dio.post(ConstantManager.loginUrl, data);
-      final token = response != null ? response['token'] : null;
+      final token = TokenModel.fromJson(response.data);
       print('token: $token');
       return Right(token);
     } on DioException catch (e) {

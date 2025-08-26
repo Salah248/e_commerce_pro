@@ -1,8 +1,5 @@
-import 'package:e_commerce_pro/data/model/products_model.dart';
 import 'package:e_commerce_pro/provider/cart_provider.dart';
-import 'package:e_commerce_pro/provider/quantity_state.dart';
 import 'package:e_commerce_pro/resources/color_manager.dart';
-
 import 'package:e_commerce_pro/resources/style_manager.dart';
 import 'package:e_commerce_pro/ui/widgets/custom_button.dart';
 import 'package:e_commerce_pro/ui/widgets/custom_cached_image.dart';
@@ -13,8 +10,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 class MyCartPage extends ConsumerStatefulWidget {
-  const MyCartPage({super.key, required this.product});
-  final ProductsModel product;
+  const MyCartPage({super.key});
 
   @override
   ConsumerState<MyCartPage> createState() => _MyCartPageState();
@@ -24,14 +20,14 @@ class _MyCartPageState extends ConsumerState<MyCartPage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read<CartProvider>(cartProvider.notifier).getCarts();
+      ref.read(cartProvider.notifier).getCarts();
     });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final list = ref.watch(cartProvider);
+    final cartState = ref.watch(cartProvider);
     return SafeArea(
       child: SingleChildScrollView(
         child: Padding(
@@ -43,31 +39,47 @@ class _MyCartPageState extends ConsumerState<MyCartPage> {
                 style: StyleManager.headingTitle.copyWith(fontSize: 24.sp),
               ),
               SizedBox(height: 20.h),
-              list.when(
-                data: (data) {
+              cartState.when(
+                data: (carts) {
+                  if (carts.isEmpty) {
+                    return Center(
+                      child: Text(
+                        'Cart is empty',
+                        style: StyleManager.cardTitle,
+                      ),
+                    );
+                  }
+
+                  final cart = carts[0]; // Assuming first cart
                   return ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     padding: EdgeInsets.zero,
                     separatorBuilder: (context, index) =>
                         SizedBox(height: 14.h),
-                    itemCount: data.length,
+                    itemCount: cart.products!.length,
                     itemBuilder: (context, index) {
+                      final product = cart.products![index];
                       return _customItem(
-                        title: widget.product.title,
-                        size: widget.product.description,
-                        image: widget.product.image,
-                        price: widget.product.price,
+                        title: product.productId.toString(),
+                        size: 'size',
+                        image: '',
+                        price: 1500,
+                        cartIndex: 0,
+                        productIndex: index, // Use index, not productId
+                        quantity: product.quantity ?? 0,
                       );
                     },
                   );
                 },
                 error: (error, stackTrace) => Center(
-                  child: Text(error.toString(), style: StyleManager.cardTitle),
+                  child: Text(
+                    'Error loading cart',
+                    style: StyleManager.cardTitle,
+                  ),
                 ),
                 loading: () => const Center(child: CircularProgressIndicator()),
               ),
-
               SizedBox(height: 100.h),
               _customRow(title: 'Sub-total', price: 5870),
               SizedBox(height: 16.h),
@@ -111,6 +123,9 @@ class _MyCartPageState extends ConsumerState<MyCartPage> {
     required String? size,
     required String? image,
     required double? price,
+    int? cartIndex,
+    int? productIndex,
+    required int quantity,
   }) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 14.h),
@@ -188,13 +203,13 @@ class _MyCartPageState extends ConsumerState<MyCartPage> {
                         _quantityButton(
                           icon: Icons.remove,
                           onPressed: () {
-                            if (ref.read(quantityProvider) > 0) {
-                              ref.read(quantityProvider.notifier).decrement();
-                            }
+                            ref
+                                .read(cartProvider.notifier)
+                                .decrementQuantity(cartIndex!, productIndex!);
                           },
                         ),
                         Text(
-                          '${ref.watch(quantityProvider)}',
+                          '$quantity',
                           style: StyleManager.headingTitle.copyWith(
                             fontSize: 12.sp,
                             fontWeight: FontWeight.w500,
@@ -203,7 +218,9 @@ class _MyCartPageState extends ConsumerState<MyCartPage> {
                         _quantityButton(
                           icon: Icons.add,
                           onPressed: () {
-                            ref.read(quantityProvider.notifier).increment();
+                            ref
+                                .read(cartProvider.notifier)
+                                .incrementQuantity(cartIndex!, productIndex!);
                           },
                         ),
                       ],

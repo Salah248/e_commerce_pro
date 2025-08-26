@@ -1,4 +1,6 @@
 import 'package:e_commerce_pro/data/model/products_model.dart';
+import 'package:e_commerce_pro/provider/cart_provider.dart';
+import 'package:e_commerce_pro/provider/update_cart_provider.dart';
 import 'package:e_commerce_pro/resources/color_manager.dart';
 import 'package:e_commerce_pro/resources/route_manager.dart';
 import 'package:e_commerce_pro/resources/style_manager.dart';
@@ -22,6 +24,7 @@ class ProductDetailsScreen extends ConsumerStatefulWidget {
 }
 
 class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,10 +51,14 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                   child: FadeInAnimation(child: widget),
                 ),
                 children: [
-                  CustomCachedNetworkImage(
-                    imageUrl: widget.productsModel.image ?? '',
-                    width: 341.w,
-                    height: 358.h,
+                  Hero(
+                    tag: widget.productsModel.image!,
+                    child: CustomCachedNetworkImage(
+                      fit: BoxFit.fitHeight,
+                      imageUrl: widget.productsModel.image ?? '',
+                      width: 341.w,
+                      height: 358.h,
+                    ),
                   ),
                   SizedBox(height: 12.h),
                   Text(
@@ -92,6 +99,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                     style: StyleManager.cardSubTitle,
                     textAlign: TextAlign.start,
                   ),
+                  SizedBox(height: 140.h),
                 ],
               ),
             ),
@@ -102,6 +110,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
   }
 
   Widget _bottomSheet() {
+    ref.watch(cartProvider);
     return Container(
       height: 105.h,
       clipBehavior: Clip.none,
@@ -133,9 +142,24 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
           Expanded(
             child: CustomButton(
               buttonTitle: 'Add to Cart',
+              isLoading: isLoading,
               onPressed: () async {
+                ref
+                    .read(updateCartProvider.notifier)
+                    .addToCart(
+                      date: DateTime.now().toIso8601String(),
+                      product: widget.productsModel,
+                      quantity: 1,
+                    );
+                setState(() {
+                  isLoading = true;
+                });
+                await Future.delayed(const Duration(seconds: 1));
+                setState(() {
+                  isLoading = false;
+                });
                 showSnackBar(context, 'Product added to cart');
-                context.go(Routes.main, extra: widget.productsModel);
+                context.go(Routes.main);
               },
               width: 240.w,
               height: 54.h,

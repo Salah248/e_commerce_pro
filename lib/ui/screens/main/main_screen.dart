@@ -1,4 +1,3 @@
-import 'package:e_commerce_pro/data/model/products_model.dart';
 import 'package:e_commerce_pro/resources/color_manager.dart';
 import 'package:e_commerce_pro/ui/screens/main/Pages/account_page.dart';
 import 'package:e_commerce_pro/ui/screens/main/Pages/home_page.dart';
@@ -7,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key, this.productsModel});
-  final ProductsModel? productsModel;
+  const MainScreen({super.key});
+
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
@@ -22,7 +21,7 @@ class _MainScreenState extends State<MainScreen> {
     _items = [
       Container(),
       const HomePage(),
-      MyCartPage(product: widget.productsModel!),
+      const MyCartPage(),
       const AccountPage(),
       Container(),
     ];

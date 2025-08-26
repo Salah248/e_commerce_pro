@@ -16,12 +16,9 @@ class CategoriesProvider extends StateNotifier<AsyncValue<List<String>>> {
         ConstantManager.getCategoriesUrl,
       );
 
-      // تحويل List<dynamic> إلى List<String>
-      final List<String> categories = (response as List)
-          .map((e) => e.toString())
-          .toList();
-
-      state = AsyncValue.data(categories);
+      final List<dynamic> jsonList = response.data;
+      final List<String> category = jsonList.map((e) => e as String).toList();
+      state = AsyncValue.data(category);
     } on DioException catch (e) {
       log(e.toString());
       state = AsyncValue.error(e, StackTrace.current);

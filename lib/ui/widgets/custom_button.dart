@@ -16,6 +16,7 @@ class CustomButton extends StatelessWidget {
     this.backgroundColor,
     this.textColor,
     this.bordarColor,
+    this.isLoading = false,
   });
   final void Function()? onPressed;
   final String buttonTitle;
@@ -27,6 +28,7 @@ class CustomButton extends StatelessWidget {
   final Color? backgroundColor;
   final Color? textColor;
   final Color? bordarColor;
+  final bool? isLoading;
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -39,26 +41,28 @@ class CustomButton extends StatelessWidget {
         ),
       ),
       onPressed: onPressed,
-      child: Row(
-        mainAxisAlignment: iconAlignment == IconAlignment.end
-            ? MainAxisAlignment.spaceBetween
-            : MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          if (iconAlignment != IconAlignment.end && icon != null) icon!,
-          SizedBox(width: 10.w),
-          Text(
-            buttonTitle,
-            style: StyleManager.buttonTitle.copyWith(
-              fontSize: fontSize,
-              color: textColor ?? ColorManager.whiteColor,
+      child: isLoading!
+          ? const Center(child: CircularProgressIndicator(color: Colors.white))
+          : Row(
+              mainAxisAlignment: iconAlignment == IconAlignment.end
+                  ? MainAxisAlignment.spaceBetween
+                  : MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (iconAlignment != IconAlignment.end && icon != null) icon!,
+                SizedBox(width: 10.w),
+                Text(
+                  buttonTitle,
+                  style: StyleManager.buttonTitle.copyWith(
+                    fontSize: fontSize,
+                    color: textColor ?? ColorManager.whiteColor,
+                  ),
+                ),
+                SizedBox(width: 10.w),
+                if (iconAlignment == IconAlignment.end && icon != null) icon!,
+              ],
             ),
-          ),
-          SizedBox(width: 10.w),
-          if (iconAlignment == IconAlignment.end && icon != null) icon!,
-        ],
-      ),
     );
   }
 }

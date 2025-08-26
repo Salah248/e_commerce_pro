@@ -12,6 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -106,8 +107,21 @@ class _HomePageState extends ConsumerState<HomePage> {
                         style: StyleManager.cardTitle,
                       ),
                     ),
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
+                    loading: () => ListView.separated(
+                      separatorBuilder: (context, index) =>
+                          SizedBox(width: 8.w),
+                      itemCount: 4,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) => Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(
+                          color: Colors.white,
+                          margin: const EdgeInsets.all(8),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -150,8 +164,28 @@ class _HomePageState extends ConsumerState<HomePage> {
                         style: StyleManager.cardTitle,
                       ),
                     ),
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
+                    loading: () => GridView.builder(
+                      shrinkWrap: true,
+                      itemCount: 6, // عدد العناصر الوهمية أثناء التحميل
+                      padding: EdgeInsets.only(top: 12.h),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 19.w,
+                        mainAxisSpacing: 20.h,
+                        childAspectRatio: 0.80,
+                      ),
+                      itemBuilder: (context, index) => Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(
+                          color: Colors.white,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                          margin: const EdgeInsets.all(8),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -251,35 +285,34 @@ class _HomePageState extends ConsumerState<HomePage> {
       onTap: () {
         context.push(Routes.productDetails, extra: extra);
       },
-      child: Hero(
-        tag: extra!,
-        transitionOnUserGestures: true,
-        child: Container(
-          decoration: const BoxDecoration(color: Colors.transparent),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CustomCachedNetworkImage(
+      child: Container(
+        decoration: const BoxDecoration(color: Colors.transparent),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Hero(
+              tag: image!,
+              child: CustomCachedNetworkImage(
                 imageUrl: image,
                 width: 161.w,
                 height: 174.h,
               ),
-              Text(
-                title ?? 'Null',
-                style: StyleManager.cardTitle.copyWith(fontSize: 16.sp),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+            ),
+            Text(
+              title ?? '',
+              style: StyleManager.cardTitle.copyWith(fontSize: 16.sp),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            Text(
+              '\$ ${NumberFormat('#,##0.##').format(price ?? 0.0)}',
+              style: StyleManager.textFieldHint.copyWith(
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w500,
               ),
-              Text(
-                '\$ ${NumberFormat('#,##0.##').format(price ?? 0.0)}',
-                style: StyleManager.textFieldHint.copyWith(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

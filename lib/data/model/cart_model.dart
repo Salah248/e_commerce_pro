@@ -19,6 +19,21 @@ class CartModel {
     }
     iV = json['__v'];
   }
+  CartModel copyWith({
+    int? id,
+    int? userId,
+    String? date,
+    List<Products>? products,
+    int? iV,
+  }) {
+    return CartModel(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      date: date ?? this.date,
+      products: products ?? this.products,
+      iV: iV ?? this.iV,
+    );
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -49,5 +64,12 @@ class Products {
     data['productId'] = productId;
     data['quantity'] = quantity;
     return data;
+  }
+
+  Products copyWith({int? productId, int? quantity}) {
+    return Products(
+      productId: productId ?? this.productId,
+      quantity: quantity ?? this.quantity,
+    );
   }
 }

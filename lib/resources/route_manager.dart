@@ -6,6 +6,7 @@ import 'package:e_commerce_pro/ui/screens/main/main_screen.dart';
 import 'package:e_commerce_pro/ui/screens/main/product_detailes_screen.dart';
 import 'package:e_commerce_pro/ui/screens/splash_screen.dart';
 import 'package:go_router/go_router.dart';
+import 'package:go_transitions/go_transitions.dart';
 
 class Routes {
   static const String splash = '/';
@@ -25,19 +26,22 @@ class RouteManager {
       ),
       GoRoute(
         path: Routes.login,
+        pageBuilder: GoTransitions.fadeUpwards.call,
         builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
         path: Routes.signUp,
+        pageBuilder: GoTransitions.fadeUpwards.call,
         builder: (context, state) => const SignupScreen(),
       ),
       GoRoute(
         path: Routes.main,
-        builder: (context, state) =>
-            MainScreen(productsModel: state.extra as ProductsModel),
+        pageBuilder: GoTransitions.fadeUpwards.call,
+        builder: (context, state) => const MainScreen(),
       ),
       GoRoute(
         path: Routes.productDetails,
+        pageBuilder: GoTransitions.fadeUpwards.call,
         builder: (context, state) {
           return ProductDetailsScreen(
             productsModel: state.extra as ProductsModel,
@@ -46,6 +50,7 @@ class RouteManager {
       ),
       GoRoute(
         path: Routes.address,
+        pageBuilder: GoTransitions.fadeUpwards.call,
         builder: (context, state) => const AdressScreen(),
       ),
     ],

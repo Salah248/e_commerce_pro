@@ -16,13 +16,11 @@ class ProductsProvider extends StateNotifier<AsyncValue<List<ProductsModel>>> {
         ConstantManager.getProductsUrl,
       );
 
-      // استجابة API هي List من المنتجات
-      final List<dynamic> jsonList = response as List<dynamic>;
-      final List<ProductsModel> products = jsonList
-          .map((e) => ProductsModel.fromJson(e))
+      final List<dynamic> jsonList = response.data;
+      final List<ProductsModel> product = jsonList
+          .map((json) => ProductsModel.fromJson(json))
           .toList();
-
-      state = AsyncValue.data(products); // ← تحديث الحالة هنا
+      state = AsyncValue.data(product); // ← تحديث الحالة هنا
     } on DioException catch (e) {
       log(e.toString());
       state = AsyncValue.error(e, StackTrace.current); // ← في حالة الخطأ
@@ -35,12 +33,12 @@ class ProductsProvider extends StateNotifier<AsyncValue<List<ProductsModel>>> {
       final response = await di<DioService>().get(
         '${ConstantManager.getCategoryProductsUrl}$category',
       );
-
       // استجابة API هي List من المنتجات
-      final jsonList = response as List<dynamic>;
-      final List<ProductsModel> productsCategory = jsonList.map((e) {
-        return ProductsModel.fromJson(e);
-      }).toList();
+      final jsonList = response.data;
+      final List<ProductsModel> productsCategory = jsonList
+          .map((json) => ProductsModel.fromJson(json))
+          .toList()
+          .cast<ProductsModel>();
       state = AsyncValue.data(productsCategory); // ← تحديث الحالة هنا
     } on DioException catch (e) {
       log(e.toString());

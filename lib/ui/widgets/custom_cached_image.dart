@@ -12,12 +12,13 @@ class CustomCachedNetworkImage extends StatelessWidget {
     this.width,
     this.height,
     this.radius,
+    this.fit,
   });
   final String? imageUrl;
   final double? width;
   final double? height;
   final double? radius;
-
+  final BoxFit? fit;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,7 +32,7 @@ class CustomCachedNetworkImage extends StatelessWidget {
         imageUrl: (imageUrl == null || imageUrl!.isEmpty)
             ? 'https://static.thenounproject.com/png/504708-200.png'
             : imageUrl!,
-        fit: BoxFit.cover,
+        fit: fit ?? BoxFit.cover,
         errorWidget: (context, url, error) {
           log('error: $error');
           return Row(

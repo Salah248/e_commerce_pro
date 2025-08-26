@@ -85,7 +85,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   SizedBox(height: 55.h),
                   CustomButton(
                     buttonTitle: 'Sign In',
-                    onPressed: () async {
+                    onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         post
                             .postLogin({
@@ -96,17 +96,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               if (value.isRight()) {
                                 di<SecureStorage>().set(
                                   'token',
-                                  value.fold((l) => '', (r) => r),
+                                  value.fold((l) => '', (r) => r.token ?? ''),
                                 );
-                                context.go(Routes.main);
                                 showSnackBar(context, 'Login successfully');
+                                context.go(Routes.main);
                               } else {
                                 showSnackBar(
                                   context,
-                                  value.fold((l) => l, (r) => r),
+                                  value.fold((l) => l, (r) => r.token ?? ''),
                                 );
                               }
                             });
+                      } else {
+                        showSnackBar(context, 'Please fill all fields');
                       }
                     },
                   ),
