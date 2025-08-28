@@ -1,4 +1,4 @@
-import 'package:e_commerce_pro/shared/provider/post_provider.dart';
+import 'package:e_commerce_pro/shared/provider/auth/signup_provider.dart';
 import 'package:e_commerce_pro/core/theme/color_manager.dart';
 import 'package:e_commerce_pro/core/routes/route_manager.dart';
 import 'package:e_commerce_pro/shared/widgets/custom_app_bar.dart';
@@ -28,7 +28,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   var _obscure = true;
   @override
   Widget build(BuildContext context) {
-    final post = ref.read<PostProviderNotifier>(postProvider.notifier);
+    final post = ref.read<SignUpProviderNotifier>(signUpProvider.notifier);
     return Scaffold(
       body: SafeArea(
         child: Padding(

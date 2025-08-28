@@ -1,29 +1,31 @@
 class CartModel {
-  int? id;
-  int? userId;
-  String? date;
-  List<Products>? products;
-  int? iV;
+  final int? id;
+  final int? userId;
+  final String? date;
+  final List<CartProduct>? products;
+  final int? iV;
 
   CartModel({this.id, this.userId, this.date, this.products, this.iV});
 
-  CartModel.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    userId = json['userId'];
-    date = json['date'];
-    if (json['products'] != null) {
-      products = <Products>[];
-      json['products'].forEach((v) {
-        products!.add(Products.fromJson(v));
-      });
-    }
-    iV = json['__v'];
+  factory CartModel.fromJson(Map<String, dynamic> json) {
+    return CartModel(
+      id: json['id'],
+      userId: json['userId'],
+      date: json['date'],
+      products: json['products'] != null
+          ? (json['products'] as List)
+                .map((v) => CartProduct.fromJson(v))
+                .toList()
+          : null,
+      iV: json['__v'],
+    );
   }
+
   CartModel copyWith({
     int? id,
     int? userId,
     String? date,
-    List<Products>? products,
+    List<CartProduct>? products,
     int? iV,
   }) {
     return CartModel(
@@ -36,38 +38,35 @@ class CartModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['userId'] = userId;
-    data['date'] = date;
-    if (products != null) {
-      data['products'] = products!.map((v) => v.toJson()).toList();
-    }
-    data['__v'] = iV;
-    return data;
+    return {
+      'id': id,
+      'userId': userId,
+      'date': date,
+      'products': products?.map((v) => v.toJson()).toList(),
+      '__v': iV,
+    };
   }
 }
 
-class Products {
-  int? productId;
-  int? quantity;
+class CartProduct {
+  final int? productId;
+  final int? quantity;
 
-  Products({this.productId, this.quantity});
+  CartProduct({this.productId, this.quantity});
 
-  Products.fromJson(Map<String, dynamic> json) {
-    productId = json['productId'];
-    quantity = json['quantity'];
+  factory CartProduct.fromJson(Map<String, dynamic> json) {
+    return CartProduct(
+      productId: json['productId'],
+      quantity: json['quantity'],
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['productId'] = productId;
-    data['quantity'] = quantity;
-    return data;
+    return {'productId': productId, 'quantity': quantity};
   }
 
-  Products copyWith({int? productId, int? quantity}) {
-    return Products(
+  CartProduct copyWith({int? productId, int? quantity}) {
+    return CartProduct(
       productId: productId ?? this.productId,
       quantity: quantity ?? this.quantity,
     );

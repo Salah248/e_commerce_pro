@@ -3,7 +3,7 @@ import 'package:e_commerce_pro/core/model/token_model.dart';
 import 'package:e_commerce_pro/core/services/repo/repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AuthNotifier extends AsyncNotifier<TokenModel?> {
+class LoginNotifier extends AsyncNotifier<TokenModel?> {
   @override
   Future<TokenModel?> build() async {
     // Initial state (null => no user logged in)
@@ -23,8 +23,6 @@ class AuthNotifier extends AsyncNotifier<TokenModel?> {
   }
 }
 
-final authNotifierProvider = AsyncNotifierProvider<AuthNotifier, TokenModel?>(
-  () {
-    return AuthNotifier();
-  },
-);
+final loginProvider = AsyncNotifierProvider<LoginNotifier, TokenModel?>(() {
+  return LoginNotifier();
+});

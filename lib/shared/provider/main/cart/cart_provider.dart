@@ -1,34 +1,32 @@
-import 'dart:developer';
+import 'dart:async';
 
-import 'package:dio/dio.dart';
-import 'package:e_commerce_pro/core/model/cart_model.dart';
-import 'package:e_commerce_pro/core/services/dio_servecis.dart';
-import 'package:e_commerce_pro/core/di.dart';
-import 'package:e_commerce_pro/core/utils/constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CartProvider extends StateNotifier<AsyncValue<List<CartModel>>> {
-  CartProvider() : super(const AsyncValue.loading());
+import '../../../../core/di.dart';
+import '../../../../core/model/cart_model.dart';
+import '../../../../core/services/repo/repo.dart';
 
-  Future<void> getCarts() async {
+class CartProvider extends AsyncNotifier<List<CartModel>> {
+  @override
+  FutureOr<List<CartModel>> build() {
+    return _getCarts();
+  }
+
+  Future<List<CartModel>> _getCarts() async {
+    final response = await di<MainRepo>().getCarts();
+    return response.fold((error) => throw Exception(error), (data) => data);
+  }
+
+  Future<void> refreshCart() async {
+    state = const AsyncValue.loading();
     try {
-      state = const AsyncValue.loading();
-      final response = await di<DioService>().get(ConstantManager.getCartUrl);
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonList = response.data;
-        final products = jsonList
-            .map((e) => CartModel.fromJson(e as Map<String, dynamic>))
-            .toList()
-            .cast<CartModel>();
-        state = AsyncValue.data(products);
-      }
-    } on DioException catch (e) {
-      log(e.response!.data.toString());
+      final carts = await _getCarts();
+      state = AsyncValue.data(carts);
+    } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
     }
   }
 
-  // Add methods to update quantity directly in the cart provider
   void incrementQuantity(int cartIndex, int productIndex) {
     state.whenData((carts) {
       final updatedCarts = [...carts];
@@ -63,7 +61,6 @@ class CartProvider extends StateNotifier<AsyncValue<List<CartModel>>> {
   }
 }
 
-final cartProvider =
-    StateNotifierProvider<CartProvider, AsyncValue<List<CartModel>>>(
-      (ref) => CartProvider(),
-    );
+final cartProvider = AsyncNotifierProvider<CartProvider, List<CartModel>>(
+  () => CartProvider(),
+);

@@ -1,7 +1,7 @@
 import 'package:e_commerce_pro/core/theme/color_manager.dart';
 import 'package:e_commerce_pro/ui/main/Pages/account_page.dart';
-import 'package:e_commerce_pro/ui/main/Pages/home_page.dart';
-import 'package:e_commerce_pro/ui/main/Pages/my_cart_page.dart';
+import 'package:e_commerce_pro/ui/main/Pages/home/home_page.dart';
+import 'package:e_commerce_pro/ui/main/Pages/cart/my_cart_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -21,7 +21,7 @@ class _MainScreenState extends State<MainScreen> {
     _items = [
       Container(),
       const HomePage(),
-      const MyCartPage(),
+      const CartPage(),
       const AccountPage(),
       Container(),
     ];

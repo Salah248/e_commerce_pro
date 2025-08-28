@@ -1,6 +1,5 @@
 import 'package:e_commerce_pro/core/model/products_model.dart';
-import 'package:e_commerce_pro/shared/provider/cart_provider.dart';
-import 'package:e_commerce_pro/shared/provider/update_cart_provider.dart';
+import 'package:e_commerce_pro/shared/provider/main/cart/update_cart_provider.dart';
 import 'package:e_commerce_pro/core/theme/color_manager.dart';
 import 'package:e_commerce_pro/core/routes/route_manager.dart';
 import 'package:e_commerce_pro/core/theme/style_manager.dart';
@@ -110,7 +109,6 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
   }
 
   Widget _bottomSheet() {
-    ref.watch(cartProvider);
     return Container(
       height: 105.h,
       clipBehavior: Clip.none,
@@ -144,20 +142,18 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
               buttonTitle: 'Add to Cart',
               isLoading: isLoading,
               onPressed: () async {
-                ref
-                    .read(updateCartProvider.notifier)
-                    .addToCart(
-                      date: DateTime.now().toIso8601String(),
-                      product: widget.productsModel,
-                      quantity: 1,
-                    );
                 setState(() {
                   isLoading = true;
                 });
-                await Future.delayed(const Duration(seconds: 1));
+
+                await ref
+                    .read(updateCartProvider.notifier)
+                    .addToCart(product: widget.productsModel, quantity: 1);
+
                 setState(() {
                   isLoading = false;
                 });
+
                 showSnackBar(context, 'Product added to cart');
                 context.go(Routes.main);
               },

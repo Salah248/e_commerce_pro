@@ -1,6 +1,6 @@
 import 'package:e_commerce_pro/core/services/secure_storge.dart';
 import 'package:e_commerce_pro/core/di.dart';
-import 'package:e_commerce_pro/shared/provider/auth/auth_provider.dart';
+import 'package:e_commerce_pro/shared/provider/auth/login_provider.dart';
 import 'package:e_commerce_pro/core/theme/color_manager.dart';
 import 'package:e_commerce_pro/core/routes/route_manager.dart';
 import 'package:e_commerce_pro/shared/widgets/custom_app_bar.dart';
@@ -28,7 +28,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(authNotifierProvider, (previous, next) {
+    ref.listen(loginProvider, (previous, next) {
       next.whenOrNull(
         error: (err, _) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -46,7 +46,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         },
       );
     });
-    final authState = ref.watch(authNotifierProvider);
+    final authState = ref.watch(loginProvider);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -137,16 +137,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   void _signIn() {
     if (_formKey.currentState!.validate()) {
       ref
-          .read(authNotifierProvider.notifier)
-          .login(_userNameController.text, _passwordController.text)
-          .then((_) {
-            final authState = ref.read(authNotifierProvider);
-            if (authState is AsyncData && authState.value != null) {
-              di<SecureStorage>().set('token', authState.value?.token ?? '');
-              showSnackBar(context, 'Login successfully');
-              context.go(Routes.main);
-            }
-          });
+          .read(loginProvider.notifier)
+          .login(_userNameController.text, _passwordController.text);
     } else {
       showSnackBar(context, 'Please fill all fields');
     }

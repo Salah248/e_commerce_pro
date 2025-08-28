@@ -210,7 +210,7 @@ class _AccountPageState extends State<AccountPage> {
                 backgroundColor: ColorManager.redColor,
                 onPressed: () async {
                   context.pop();
-                  await di<SecureStorage>().delete('token');
+                  await di<SecureStorage>().delete();
                   showSnackBar(context, 'Logout successfully');
                   context.go(Routes.login);
                 },

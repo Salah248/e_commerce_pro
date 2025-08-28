@@ -11,4 +11,5 @@ void initDi() {
   di.registerSingleton<FlutterSecureStorage>(const FlutterSecureStorage());
   di.registerSingleton<SecureStorage>(SecureStorage());
   di.registerLazySingleton(() => AuthRepository(di()));
+  di.registerLazySingleton(() => MainRepo(di()));
 }
