@@ -51,74 +51,81 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: SingleChildScrollView(
-            child: Form(
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const CustomAppBar(
-                    title: 'Login to your account',
-                    supTitle: 'It’s great to see you again.',
-                  ),
-                  SizedBox(height: 24.h),
-                  CustomTextFormField(
-                    controller: _userNameController,
-                    titleText: 'User Name',
-                    hintText: 'email address',
-                    validator: (value) {
-                      if (value!.isEmpty || value.length < 2) {
-                        return 'Please enter a valid User Name';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 16.h),
-                  CustomTextFormField(
-                    controller: _passwordController,
-                    validator: (value) {
-                      if (value!.isEmpty || value.length < 6) {
-                        return 'Please enter a valid password';
-                      }
-                      return null;
-                    },
-                    titleText: 'Password',
-                    hintText: 'password',
-                    obscureText: obscure,
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          obscure = !obscure;
-                        });
+          child: Form(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: SizedBox(
+                height: MediaQuery.of(
+                  context,
+                ).size.height, // يجعل العمود بارتفاع الشاشة
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 16.h),
+                    const CustomAppBar(
+                      title: 'Login to your account',
+                      supTitle: 'It’s great to see you again.',
+                    ),
+                    SizedBox(height: 24.h),
+                    CustomTextFormField(
+                      controller: _userNameController,
+                      titleText: 'User Name',
+                      hintText: 'email address',
+                      validator: (value) {
+                        if (value!.isEmpty || value.length < 2) {
+                          return 'Please enter a valid User Name';
+                        }
+                        return null;
                       },
-                      icon: Icon(
-                        obscure
-                            ? Icons.visibility_off_outlined
-                            : Icons.visibility_outlined,
-                        color: ColorManager.secondaryColor,
+                    ),
+                    SizedBox(height: 16.h),
+                    CustomTextFormField(
+                      controller: _passwordController,
+                      validator: (value) {
+                        if (value!.isEmpty || value.length < 6) {
+                          return 'Please enter a valid password';
+                        }
+                        return null;
+                      },
+                      titleText: 'Password',
+                      hintText: 'password',
+                      obscureText: obscure,
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            obscure = !obscure;
+                          });
+                        },
+                        icon: Icon(
+                          obscure
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                          color: ColorManager.secondaryColor,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 55.h),
-                  authState.when(
-                    loading: () => const CircularProgressIndicator(),
-                    data: (_) => CustomButton(
-                      buttonTitle: 'Sign In',
-                      onPressed: () => _signIn(),
+                    SizedBox(height: 55.h),
+                    authState.when(
+                      loading: () => const CircularProgressIndicator(),
+                      data: (_) => CustomButton(
+                        buttonTitle: 'Sign In',
+                        onPressed: () => _signIn(),
+                      ),
+                      error: (error, _) => CustomButton(
+                        buttonTitle: 'Retry',
+                        onPressed: () => _signIn(),
+                      ),
                     ),
-                    error: (error, _) => CustomButton(
-                      buttonTitle: 'Retry',
-                      onPressed: () => _signIn(),
+                    const Spacer(), // يدفع النص للأسفل
+                    CustomTextSpan(
+                      text: 'Don’t have an account?',
+                      textInline: 'Join',
+                      onTap: () => context.push(Routes.signUp),
                     ),
-                  ),
-                  SizedBox(height: 260.h),
-                  CustomTextSpan(
-                    text: 'Don’t have an account?',
-                    textInline: 'Join',
-                    onTap: () => context.push(Routes.signUp),
-                  ),
-                ],
+                    SizedBox(height: 16.h), // مسافة صغيرة عن الحافة السفلية
+                  ],
+                ),
               ),
             ),
           ),
@@ -139,6 +146,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       ref
           .read(loginProvider.notifier)
           .login(_userNameController.text, _passwordController.text);
+      FocusScope.of(context).unfocus();
     } else {
       showSnackBar(context, 'Please fill all fields');
     }

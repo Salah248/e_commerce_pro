@@ -26,7 +26,7 @@ class ProductsGrid extends ConsumerWidget {
               crossAxisCount: 2,
               crossAxisSpacing: 19.w,
               mainAxisSpacing: 20.h,
-              childAspectRatio: 0.80,
+              childAspectRatio: 0.75,
             ),
             itemBuilder: (context, index) =>
                 AnimationConfiguration.staggeredGrid(
