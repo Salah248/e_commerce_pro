@@ -27,28 +27,27 @@ class CategoriesList extends ConsumerWidget {
               itemCount: data.length,
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) =>
-                  AnimationConfiguration.staggeredList(
-                    position: index,
-                    duration: const Duration(milliseconds: 375),
-                    child: SlideAnimation(
-                      child: FadeInAnimation(
-                        child: CustomCategoryOfProduct(
-                          isSelected: selectedCategory == data[index].name,
-                          onPressed: () {
-                            ref
-                                .read(productsProvider.notifier)
-                                .getCategoryProducts(
-                                  category: data[index].name,
-                                );
-                            ref.read(selectedCategoryProvider.notifier).state =
-                                data[index].name;
-                          },
-                          data: data[index].name,
-                        ),
+              itemBuilder: (context, index) {
+                return AnimationConfiguration.staggeredList(
+                  position: index,
+                  duration: const Duration(milliseconds: 375),
+                  child: SlideAnimation(
+                    child: FadeInAnimation(
+                      child: CustomCategoryOfProduct(
+                        isSelected: selectedCategory == data[index].name,
+                        onPressed: () {
+                          ref
+                              .read(productsProvider.notifier)
+                              .getCategoryProducts(category: data[index].name);
+                          ref.read(selectedCategoryProvider.notifier).state =
+                              data[index].name;
+                        },
+                        data: data[index].name,
                       ),
                     ),
                   ),
+                );
+              },
             );
           },
           error: (error, stackTrace) => Center(

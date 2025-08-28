@@ -33,6 +33,12 @@ class ProductsProvider extends AsyncNotifier<List<ProductsModel>> {
   }
 
   Future<void> getCategoryProducts({required String category}) async {
+    if (category == 'All') {
+      // إرجاع جميع البيانات المخزنة محلياً
+      state = AsyncData(_all);
+      return;
+    }
+
     state = const AsyncLoading();
     final result = await di<MainRepo>().getProductsByCategory(category);
     state = result.fold(
